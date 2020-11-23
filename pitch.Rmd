@@ -1,0 +1,48 @@
+---
+title: "App Pitch - Linear Model with Knots"
+author: "Gonzalo Nelis S."
+date: "23/11/2020"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Summary
+
+This app fit a linear model to a random data with a cyclic pattern using a given number of 'knots' or break points. These knots provide more flexibility for the linear model and allow for a better fitting. The code for the base adjustment with knots is the following:
+
+```{r model, eval=FALSE, echo=TRUE}
+n <- 500; x <- seq(0, 4 * pi, length = n); y <- sin(x) + rnorm(n, sd = .3)
+knots <- seq(0, 8 * pi, length = 20); 
+splineTerms <- sapply(knots, function(knot) (x > knot) * (x - knot))
+xMat <- cbind(1, x, splineTerms)
+yhat <- predict(lm(y ~ xMat - 1))
+plot(x, y, frame = FALSE, pch = 21, bg = "lightblue", cex = 2)
+lines(x, yhat, col = "red", lwd = 2)
+```
+
+The app can be found at: [https://gnelis.shinyapps.io/Knots/](ShinyApps - Knots)
+
+## Model Output
+
+The output of the model is the following:
+
+```{r output, echo = FALSE}
+n <- 500; x <- seq(0, 4 * pi, length = n); y <- sin(x) + rnorm(n, sd = .3)
+knots <- seq(0, 8 * pi, length = 20); 
+splineTerms <- sapply(knots, function(knot) (x > knot) * (x - knot))
+xMat <- cbind(1, x, splineTerms)
+yhat <- predict(lm(y ~ xMat - 1))
+plot(x, y, frame = FALSE, pch = 21, bg = "lightblue", cex = 2)
+lines(x, yhat, col = "red", lwd = 2)
+```
+
+## App layout
+
+The app layout allows for controlling the number of knots, the use of quadratic terms, the random number generator seed number and the fitted model RSME.
+
+![](img/app_layout.png){#id .class width=85% height=100%}
+
+## Thanks for watching!
